@@ -6,9 +6,16 @@ function Circle() {
 
     const [data,setData] = useState([10,20,30,40,50]);
     const svgRef = useRef();
+    const width = 500; 
+    const height = 300; 
     
     useEffect(() => {
-        const svg = select(svgRef.current);
+        const svg = select(svgRef.current)
+                .attr("viewBox",`0 0 ${width} ${height}`)
+                .attr("preserveAspectRatio","xMidYMid meet")
+                .style("height",height)
+                .style("width",'100%')
+
         let maxEl = max(data);
         const circleElements = svg
             .append('g')
@@ -21,7 +28,7 @@ function Circle() {
             // )
             .enter().append('circle')
             .attr("r",(value,i)=>value)
-            .attr("cx",(value,i)=>100*(i+1)+50)
+            .attr("cx",(value,i)=>100*(i)+50)
             .attr("cy",(value,i)=>maxEl+10)
             .attr("stroke","red")
             .style("fill","green")
@@ -32,14 +39,14 @@ function Circle() {
             .enter().append('text')
             .text(node => node)
             .attr('font-size',8)
-            .attr("dx",(value,i)=>100*(i+1)+45)
+            .attr("dx",(value,i)=>100*(i)+45)
             .attr("dy",(value,i)=>maxEl+15)
     }, [])
     
 
     return (
-      <div className="">
-          <svg style={{width:'100%',height:'100%',border:'2px solid black'}} ref={svgRef}></svg>
+      <div>
+          <svg ref={svgRef}></svg>
       </div>
     );
 }

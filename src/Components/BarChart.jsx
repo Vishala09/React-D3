@@ -25,20 +25,20 @@ function BarChart() {
         
         
         const xScale = scaleBand()
-                        .domain(data.map((value,index)=>index))
-                        .range([0,width-offsetX])
+                        .domain(data.map((value,index)=>index)) //We need all the data points to be on xAxis
+                        .range([0,width])
                         .padding(0.5); 
 
         const yScale = scaleLinear()
                         .domain([0,maxEl])
-                        .range([height-offsetY,0]);
+                        .range([height,0]);
 
         const colorScale = scaleLinear()
             .domain([0,maxEl/2,maxEl])
             .range(["red","orange","green"])
             
         const xAxis = axisBottom(xScale).ticks(data.length);
-        svgScaled.select('.x-axis').style("transform",`translateY(${height-offsetY}px)`).call(xAxis);
+        svgScaled.select('.x-axis').style("transform",`translateY(${height}px)`).call(xAxis);
 
         const yAxis = axisLeft(yScale).ticks(10)
         svgScaled.select('.y-axis').style("transform","translateX(0px)").call(yAxis);

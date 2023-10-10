@@ -8,14 +8,27 @@ function Path() {
     const [data,setData] = useState([10,20,30,40,50,10,20,30,40,50]);
     const svgRef = useRef();
     const svgScaleRef = useRef();
+    const leftMargin = 50; const topMargin = 100;
+    const width = 500; 
+    const height = 300; 
     
     useEffect(() => {
-        const svg = select(svgRef.current);
-        const svgScaled = select(svgScaleRef.current);
-        let maxEl = max(data); const leftMargin = 100; const topMargin = 100;
+        const svg = select(svgRef.current)
+                    .attr("viewBox",`0 0 ${width} ${height}`)
+                    .attr("preserveAspectRatio","xMidYMid meet")
+                    .style("height",height)
+                    .style("width",'100%')
+                    .append('g')
+        const svgScaled = select(svgScaleRef.current)
+                    .attr("viewBox",`0 0 ${width} ${height}`)
+                    .attr("preserveAspectRatio","xMidYMid meet")
+                    .style("height",height)
+                    .style("width",'100%')
+
+        let maxEl = max(data); 
 
         const lineEl = line()
-                        .x((value,i)=>leftMargin*(i+1)+50) //each data point with constant x distance
+                        .x((value,i)=>i==0?0:leftMargin*(i+1)) //each data point with constant x distance
                         .y((value)=>value)
                         .curve(curveCardinal)
         const pathElements = svg
@@ -26,22 +39,22 @@ function Path() {
                         .attr("stroke","red")
                         .style("fill","none")
 
-        const textElems = svg.append('g')
+        const textElems = svg
                         .selectAll('text')
                         .data(data)
                         .enter().append('text')
                         .text(node => node)
                         .attr('font-size',8)
-                        .attr("dx",(value,i)=>leftMargin*(i+1)+45)
+                        .attr("dx",(value,i)=>i==0?0:leftMargin*(i+1))
                         .attr("dy",(value,i)=>topMargin)
             
 
         const scaleXEl = scaleLinear()
                         .domain([0,data.length-1])
-                        .range([leftMargin+0,1000]); //leftmargin for 1st element
+                        .range([0,width]); 
         const scaleYEl = scaleLinear()
                         .domain([0,maxEl])
-                        .range([maxEl+100,0])
+                        .range([height,0])
                         
         
         const lineElScaled = line()
@@ -68,19 +81,19 @@ function Path() {
                 .attr("r", 3)
             
         const xAxis = axisBottom(scaleXEl).ticks(data.length).tickFormat((i)=>i).tickPadding(5);
-        svgScaled.select('.x-axis').style("transform","translateY(150px)").call(xAxis);
+        svgScaled.select('.x-axis').style("transform",`translateY(${height}px)`).call(xAxis);
 
         const yAxis = axisLeft(scaleYEl).ticks(data.length).tickFormat((i)=>i)
-        svgScaled.select('.y-axis').style("transform","translateX(100px)").call(yAxis);
+        svgScaled.select('.y-axis').style("transform","translateX(0px)").call(yAxis);
 
 
     }, [])
     
 
     return (
-      <div className="">
-          <svg style={{width:'100%',height:'100%',border:'2px solid black'}} ref={svgRef}></svg>
-          <svg style={{width:'100%',height:'100%',border:'2px solid black'}} ref={svgScaleRef}>
+      <div >
+          <svg  ref={svgRef}></svg>
+          <svg  ref={svgScaleRef}>
             
             <g className='x-axis'></g>
             <g className='y-axis'></g>
