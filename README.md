@@ -8,7 +8,7 @@ React D3 Starter project
 <br/>
 <img width="918" alt="image" src="https://github.com/Vishala09/React-D3/assets/65274029/668a9f08-3306-41eb-9a67-561aa97b171d">
 
-**Path**
+**Path without y axis inversion**
 <br/>
 <img width="918" alt="image" src="https://github.com/Vishala09/React-D3/assets/65274029/2bec4ff0-4aea-4044-922b-f2d50a623cf8">
 
@@ -18,7 +18,7 @@ React D3 Starter project
 
 **Animated Bar Chart**
 <br/>
-<img width="919" alt="image" src="https://github.com/Vishala09/React-D3/assets/65274029/ef7ef6d3-8009-49f1-9569-23511ea15af9">
+<img width="919" alt="image" src="https://github.com/Vishala09/React-D3/assets/65274029/09326d1b-98c0-42a2-89d4-25d5ee121792">
 
 **Inverted Bar Chart**
 <br/>
