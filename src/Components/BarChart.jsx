@@ -6,7 +6,7 @@ import {select,line,curveCardinal,scaleLinear,axisBottom,axisLeft,max,scaleBand}
 function BarChart() {
 
     const [data,setData] = useState([10,20,30,40,50,10,70,60,80,50]);
-    const svgScaleRef = useRef();
+    const svgRef = useRef();
     
     useEffect(() => {
        
@@ -15,7 +15,7 @@ function BarChart() {
         const textYOffset = 10;
         
         
-        const svgScaled = select(svgScaleRef.current)
+        const svg = select(svgRef.current)
                             .attr("viewBox",`0 0 ${width} ${height}`)
                             .attr("preserveAspectRatio","xMidYMid meet")
                             .style("height",height)
@@ -38,12 +38,12 @@ function BarChart() {
             .range(["red","orange","green"])
             
         const xAxis = axisBottom(xScale).ticks(data.length);
-        svgScaled.select('.x-axis').style("transform",`translateY(${height}px)`).call(xAxis);
+        svg.select('.x-axis').style("transform",`translateY(${height}px)`).call(xAxis);
 
         const yAxis = axisLeft(yScale).ticks(10)
-        svgScaled.select('.y-axis').style("transform","translateX(0px)").call(yAxis);
+        svg.select('.y-axis').style("transform","translateX(0px)").call(yAxis);
 
-        svgScaled.selectAll('.bar')
+        svg.selectAll('.bar')
                 .data(data)
                 .join("rect")
                 .attr("class","bar")
@@ -52,9 +52,9 @@ function BarChart() {
                 .attr("y",(value,index)=> -height) //yScale(value) =>without transition
                 .attr("width",xScale.bandwidth())
                 .on("mouseenter",(event,value)=>{
-                    const index = svgScaled.selectAll(".bar").nodes().indexOf(event.target);
+                    const index = svg.selectAll(".bar").nodes().indexOf(event.target);
         
-                    svgScaled
+                    svg
                         .selectAll(".tooltip")
                         .data([value])
                         .join((enter) => enter.append("text").attr("y", yScale(value) - textYOffset/2)) //bottom to top transition
@@ -66,7 +66,7 @@ function BarChart() {
                         .attr("y",yScale(value)-textYOffset)
                         .attr("opacity",1)
                 })
-                .on("mouseleave",()=>svgScaled.select(".tooltip").remove())
+                .on("mouseleave",()=>svg.select(".tooltip").remove())
                 .transition()
                 .attr("fill",colorScale)
                 .attr('height',(value)=>height-yScale(value))
@@ -77,7 +77,7 @@ function BarChart() {
 
     return (
       <div className="">
-          <svg  ref={svgScaleRef}>
+          <svg  ref={svgRef}>
             <g className='x-axis'></g>
             <g className='y-axis'></g>
           </svg>
@@ -89,7 +89,7 @@ function BarChart() {
           }}>Update</button>
           <button onClick={()=>{
              let dataTemp = [];
-             dataTemp = data.filter((d)=>d>50);
+             dataTemp = data.filter((d)=>d>50)
              setData(dataTemp)
           }}>Filter</button>
           <button onClick={()=>{

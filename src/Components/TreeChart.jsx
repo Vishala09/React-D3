@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect,useState , useRef } from 'react';
-import { select , hierarchy , tree , linkVertical , linkHorizontal , cluster , pack} from 'd3';
+import { select , hierarchy , tree , linkVertical , linkHorizontal , cluster , pack, zoomTransform} from 'd3';
 
 function TreeChart() {
 
@@ -134,8 +134,6 @@ function TreeChart() {
           .delay(linkobj => linkobj.source.depth*2000)
           .duration(2000)
           .attr('stroke-dashoffset',0)
-
-      
         
     },[data])
     

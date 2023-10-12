@@ -51,29 +51,39 @@ function RacingChart() {
             .attr("y",(value,index)=>yScale(index))
             .attr("fill",colorScale)
             .attr("height",yScale.bandwidth())
-            //.transition()
+            .transition()
             .attr("width",(value)=>xScale(value))
 
         svg
             //.append('g')
             .selectAll('.label')
             .data(data,(value,index)=>index)
-            .join(
-                (enter)=>enter.append('text')
-                    .attr("class","label")
-                    .text(node => node)
-                    .attr("dx",0)
-                    .attr("dy",(value,index)=>yScale(index)+yScale.bandwidth()/1.5)
-                    .transition()
-                    .duration(1000)
-                    .attr('font-size',15)
-                    .attr("dx",0+textOffsetX)
-                ,
-                (update)=>update
-                    .attr('font-size',15)
-                    .attr("dx",0+textOffsetX)
-                    .attr("dy",(value,index)=>yScale(index)+yScale.bandwidth()/1.5)
-                )
+            .join('text')
+            .attr("class","label")
+            .text(node => node)
+            .attr('font-size',15)
+            .attr("dx",0)
+            .attr("dy",(value,index)=>yScale(index)+yScale.bandwidth()/1.5)
+            .transition()
+            .duration(1000)
+            .attr("dx",0+textOffsetX)
+
+            // .join(
+            //     (enter)=>enter.append('text')
+            //         .attr("class","label")
+            //         .text(node => node)
+            //         .attr("dx",0)
+            //         .attr("dy",(value,index)=>yScale(index)+yScale.bandwidth()/1.5)
+            //         .transition()
+            //         .duration(1000)
+            //         .attr('font-size',15)
+            //         .attr("dx",0+textOffsetX)
+            //     ,
+            //     (update)=>update
+            //         .attr('font-size',15)
+            //         .attr("dx",0+textOffsetX)
+            //         .attr("dy",(value,index)=>yScale(index)+yScale.bandwidth()/1.5)
+            //     )
 
     },[data])
     

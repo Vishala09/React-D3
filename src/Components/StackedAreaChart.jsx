@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { useEffect,useState , useRef } from 'react';
-import { scaleBand, scaleLinear, select , max , axisBottom , axisLeft , stack , stackOrderAscending , schemeDark2, scaleOrdinal } from 'd3';
+import { scaleBand, scaleLinear, select , max , axisBottom , axisLeft ,stack, area , stackOrderAscending , schemeDark2, scaleOrdinal, curveCardinal, scalePoint, zoom, zoomTransform } from 'd3';
 
-function StackedBarChart() {
+
+function StackedAreaChart() {
 
     const initialData = [
         {
@@ -39,6 +40,7 @@ function StackedBarChart() {
     const keys = ['google','facebook','amazon']
     const [data,setData] = useState(initialData);
     const svgRef = useRef();
+    const [zoomState,setZoomState] = useState(null)
 
     useEffect(()=>{
 
@@ -56,17 +58,16 @@ function StackedBarChart() {
                     .order(stackOrderAscending);
         
         const layers = stackGenerator(data);
-        console.log(layers)
+
         const extent = [
             0,
             max(layers, layer => max(layer, sequence => sequence[1]))
         ];
   
-      const xScale = scaleBand()
+      const xScale = scalePoint()
         .domain(data.map(d => d.year))
         .range([0, width])
-        .padding(0.25);
-  
+      
       const yScale = scaleLinear()
         .domain(extent)
         .range([height, 0]);
@@ -74,20 +75,20 @@ function StackedBarChart() {
       const colorScale = scaleOrdinal()
         .domain(keys)
         .range(schemeDark2);
+
+      const areaGenerator = area()
+        .x(seq=>xScale(seq.data.year))
+        .y0(seq=>yScale(seq[0]))
+        .y1(seq=>yScale(seq[1]))
+        .curve(curveCardinal);
   
       svg
         .selectAll(".layer")
         .data(layers)
-        .join("g")
+        .join("path")
         .attr("class", "layer")
         .attr("fill", layer => colorScale(layer.key))
-        .selectAll("rect")
-        .data(layer => layer)
-        .join("rect")
-        .attr("x", sequence => xScale(sequence.data.year)) //From where it starts on x-axis for each data point
-        .attr("width", xScale.bandwidth()) //Where to end on x-axis for each data point
-        .attr("y", sequence => yScale(sequence[1]))
-        .attr("height", sequence => yScale(sequence[0]) - yScale(sequence[1]));
+        .attr("d", layer=>areaGenerator(layer))
   
       // axes
       const xAxis = axisBottom(xScale);
@@ -96,16 +97,19 @@ function StackedBarChart() {
       const yAxis = axisLeft(yScale);
       svg.select(".y-axis").call(yAxis);
 
+
+
     },[data])
     
-    return (
-      <div className="">
+
+  return (
+        <div className="">
           <svg  ref={svgRef}>
             <g className='x-axis'></g>
             <g className='y-axis'></g>
           </svg>
-      </div>
-    )
+        </div>
+  )
 }
 
-export default StackedBarChart
+export default StackedAreaChart

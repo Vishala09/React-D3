@@ -8,6 +8,8 @@ import RacingChart from './Components/RacingChart';
 import Scales from './Components/Scales';
 import TreeChart from './Components/TreeChart';
 import StackedBarChart from './Components/StackedBarChart';
+import StackedAreaChart from './Components/StackedAreaChart';
+import TreeMap from './Components/TreeMap';
 
 function App() {
 
@@ -17,11 +19,16 @@ function App() {
        <Circle/>
        <Scales />
        <Path />
-       <DonutChart />
+       
        <BarChart />
        <RacingChart />
+       <StackedBarChart /> 
+       <StackedAreaChart />
+
+       <DonutChart />
+       
        <TreeChart />
-       <StackedBarChart />
+       <TreeMap/>
     </div>
   );
 }
